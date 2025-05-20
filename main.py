@@ -79,6 +79,37 @@ COUNTRY_MAP = {
     # Add more mappings as needed
 }
 
+COUNTRY_MAP.update({
+    "Äthiopien": "Ethiopia",
+    "Tunesien": "Tunisia",
+    "Syrien": "Syria",
+    "Bangladesch": "Bangladesh",
+    "Pakistan": "Pakistan",
+    "Madagaskar": "Madagascar",
+    "Mali": "Mali",
+    "Südafrika": "South Africa",
+    "Brasilien": "Brazil",
+    "Kolumbien": "Colombia",
+    "Argentinien": "Argentina",
+    "Bolivien": "Bolivia",
+    "Irak": "Iraq",
+    "Ägypten": "Egypt",
+    "Peru": "Peru",
+    "Iran": "Iran",
+    "Afghanistan": "Afghanistan",
+    "Korea": "South Korea"
+})
+
+COUNTRY_MAP.update({
+    # ...existing entries...
+    "Australien": "Australia",
+    "Neuseeland": "New Zealand",
+    "Kanada": "Canada",
+    "USA": "United States",
+    "Vereinigte Staaten": "United States",
+    "Mexiko": "Mexico"
+})
+
 # Create a reverse lookup from English to German
 REVERSE_COUNTRY_MAP = {v: k for k, v in COUNTRY_MAP.items()}
 
@@ -142,6 +173,34 @@ COUNTRY_TO_CODE.update({
     "Czech Republic": "CZE",
     "Slovakia": "SVK",
     "Hungary": "HUN",
+})
+
+COUNTRY_TO_CODE.update({
+    "Ethiopia": "ETH",
+    "Tunisia": "TUN",
+    "Syria": "SYR",
+    "Bangladesh": "BGD",
+    "Pakistan": "PAK",
+    "Madagascar": "MDG",
+    "Mali": "MLI",
+    "South Africa": "ZAF",
+    "Brazil": "BRA",
+    "Colombia": "COL",
+    "Argentina": "ARG",
+    "Bolivia": "BOL",
+    "Iraq": "IRQ",
+    "Egypt": "EGY",
+    "Peru": "PER",
+    "Iran": "IRN",
+    "Afghanistan": "AFG",
+    "South Korea": "KOR"
+})
+
+COUNTRY_TO_CODE.update({
+    # ...existing entries...
+    "Canada": "CAN",
+    "United States": "USA",
+    "Mexico": "MEX"
 })
 
 def extract_country_coordinates(country_name):
@@ -582,7 +641,8 @@ def update_map(current_country, mode):
     lon0, lon1 = min(lons), max(lons)
     center = dict(lat=(lat0+lat1)/2, lon=(lon0+lon1)/2)
     span = max(lat1-lat0, lon1-lon0)
-    zoom = max(2, min(6, 4/span if span>0 else 2))
+    # raise upper zoom limit from 6 to 12 for micro‐states
+    zoom = max(2, min(12, 4/span if span>0 else 2))
 
     learn_fig.update_layout(
         mapbox_center=center,
