@@ -110,6 +110,17 @@ COUNTRY_MAP.update({
     "Mexiko": "Mexico"
 })
 
+COUNTRY_MAP.update({
+    # ...existing entries...
+    "Venezuela": "Venezuela",
+    "Ecuador": "Ecuador",
+    "Chile": "Chile",
+    "Ghana": "Ghana",
+    "Kongo": "Democratic Republic of the Congo",
+    "Somalia": "Somalia",
+    "Eritrea": "Eritrea"
+})
+
 # Create a reverse lookup from English to German
 REVERSE_COUNTRY_MAP = {v: k for k, v in COUNTRY_MAP.items()}
 
@@ -203,6 +214,17 @@ COUNTRY_TO_CODE.update({
     "Mexico": "MEX"
 })
 
+COUNTRY_TO_CODE.update({
+    # ...existing entries...
+    "Venezuela": "VEN",
+    "Ecuador": "ECU",
+    "Chile": "CHL",
+    "Ghana": "GHA",
+    "Democratic Republic of the Congo": "COD",
+    "Somalia": "SOM",
+    "Eritrea": "ERI"
+})
+
 def extract_country_coordinates(country_name):
     """Extract coordinates for a country from GeoJSON data"""
     # Try to map German name to English
@@ -231,9 +253,11 @@ def extract_country_coordinates(country_name):
         return {"type": "polygon", "points": points}
     
     elif geo_type == 'multipolygon':
-        # Extract largest polygon for simplicity
-        largest_polygon = max(geometry['coordinates'], key=len)[0]
-        points = [[coord[1], coord[0]] for coord in largest_polygon]
+        # Include all sub‐polygons (e.g. Australia mainland + Tasmania)
+        points = []
+        for polygon in geometry['coordinates']:
+            for ring in polygon:
+                points.extend([[coord[1], coord[0]] for coord in ring])
         return {"type": "polygon", "points": points}
     
     return {"type": "polygon", "points": [[0, 0]]}
@@ -659,4 +683,4 @@ def update_map(current_country, mode):
 # RUN
 ###############################################################################
 if __name__ == "__main__":
-    app.run_server(debug=True, host="0.0.0.0", port=8080)
+    app.run(debug=True, host="0.0.0.0", port=8080)
