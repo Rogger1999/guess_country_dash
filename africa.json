@@ -1,0 +1,82 @@
+[
+  {
+    "nr": 1,
+    "country": "Marokko",
+    "capital": "Rabat"
+  },
+  {
+    "nr": 2,
+    "country": "Algerien",
+    "capital": "Algier"
+  },
+  {
+    "nr": 3,
+    "country": "Tunesien",
+    "capital": "Tunis"
+  },
+  {
+    "nr": 4,
+    "country": "Libyen",
+    "capital": "Tripolis"
+  },
+  {
+    "nr": 5,
+    "country": "Ägypten",
+    "capital": "Kairo"
+  },
+  {
+    "nr": 6,
+    "country": "Äthiopien",
+    "capital": "Addis Abeba"
+  },
+  {
+    "nr": 7,
+    "country": "Eritrea",
+    "capital": "Asmara"
+  },
+  {
+    "nr": 8,
+    "country": "Kenia",
+    "capital": "Nairobi"
+  },
+  {
+    "nr": 9,
+    "country": "Somalia",
+    "capital": "Mogadischu"
+  },
+  {
+    "nr": 10,
+    "country": "Mali",
+    "capital": "Bamako"
+  },
+  {
+    "nr": 11,
+    "country": "Ghana",
+    "capital": "Accra"
+  },
+  {
+    "nr": 12,
+    "country": "Kongo",
+    "capital": "Kinshasa"
+  },
+  {
+    "nr": 13,
+    "country": "Nigeria",
+    "capital": "Abuja"
+  },
+  {
+    "nr": 14,
+    "country": "Madagaskar",
+    "capital": "Antananarivo"
+  },
+  {
+    "nr": 15,
+    "country": "Südafrika",
+    "capital": "Pretoria"
+  },
+  {
+    "nr": 45,
+    "country": "Namibia",
+    "capital": "Windhoek"
+  }
+]

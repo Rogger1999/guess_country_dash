@@ -1,0 +1,87 @@
+[
+  {
+    "nr": 16,
+    "country": "Australien",
+    "capital": "Canberra"
+  },
+  {
+    "nr": 17,
+    "country": "Neuseeland",
+    "capital": "Wellington"
+  },
+  {
+    "nr": 18,
+    "country": "China",
+    "capital": "Peking"
+  },
+  {
+    "nr": 19,
+    "country": "Korea",
+    "capital": "Seoul/Pjöngjang"
+  },
+  {
+    "nr": 20,
+    "country": "Indien",
+    "capital": "Delhi"
+  },
+  {
+    "nr": 21,
+    "country": "Thailand",
+    "capital": "Bangkok"
+  },
+  {
+    "nr": 22,
+    "country": "Indonesien",
+    "capital": "Jakarta"
+  },
+  {
+    "nr": 23,
+    "country": "Malaysia",
+    "capital": "Kuala Lumpur"
+  },
+  {
+    "nr": 24,
+    "country": "Philippinen",
+    "capital": "Manila"
+  },
+  {
+    "nr": 25,
+    "country": "Japan",
+    "capital": "Tokio"
+  },
+  {
+    "nr": 26,
+    "country": "Bangladesch",
+    "capital": "Dhaka"
+  },
+  {
+    "nr": 27,
+    "country": "Syrien",
+    "capital": "Damaskus"
+  },
+  {
+    "nr": 28,
+    "country": "Iran",
+    "capital": "Teheran"
+  },
+  {
+    "nr": 29,
+    "country": "Irak",
+    "capital": "Bagdad"
+  },
+  {
+    "nr": 30,
+    "country": "Pakistan",
+    "capital": "Islamabad"
+  },
+  {
+    "nr": 31,
+    "country": "Afghanistan",
+    "capital": "Kabul"
+  },
+  {
+    "nr": 32,
+    "country": "Saudi-Arabien",
+    "capital": "Riad"
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "nr": 36,
+    "country": "Kolumbien",
+    "capital": "Bogotá"
+  },
+  {
+    "nr": 37,
+    "country": "Venezuela",
+    "capital": "Caracas"
+  },
+  {
+    "nr": 38,
+    "country": "Brasilien",
+    "capital": "Brasilia"
+  },
+  {
+    "nr": 39,
+    "country": "Argentinien",
+    "capital": "Buenos Aires"
+  },
+  {
+    "nr": 40,
+    "country": "Chile",
+    "capital": "Santiago"
+  },
+  {
+    "nr": 41,
+    "country": "Peru",
+    "capital": "Lima"
+  },
+  {
+    "nr": 42,
+    "country": "Bolivien",
+    "capital": "La Paz"
+  },
+  {
+    "nr": 43,
+    "country": "Ecuador",
+    "capital": "Quito"
+  }
+]

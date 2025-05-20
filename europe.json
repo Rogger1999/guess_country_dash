@@ -1,0 +1,232 @@
+[
+  {
+    "nr": 1,
+    "country": "Portugal",
+    "capital": "Lissabon"
+  },
+  {
+    "nr": 2,
+    "country": "Spanien",
+    "capital": "Madrid"
+  },
+  {
+    "nr": 3,
+    "country": "Frankreich",
+    "capital": "Paris"
+  },
+  {
+    "nr": 4,
+    "country": "Belgien",
+    "capital": "Brüssel"
+  },
+  {
+    "nr": 5,
+    "country": "Niederlande",
+    "capital": "Amsterdam"
+  },
+  {
+    "nr": 6,
+    "country": "Luxemburg",
+    "capital": "Luxemburg"
+  },
+  {
+    "nr": 7,
+    "country": "Grossbritannien",
+    "capital": "London"
+  },
+  {
+    "nr": 8,
+    "country": "Irland",
+    "capital": "Dublin"
+  },
+  {
+    "nr": 9,
+    "country": "Island",
+    "capital": "Reykjavik"
+  },
+  {
+    "nr": 10,
+    "country": "Norwegen",
+    "capital": "Oslo"
+  },
+  {
+    "nr": 11,
+    "country": "Schweden",
+    "capital": "Stockholm"
+  },
+  {
+    "nr": 12,
+    "country": "Finnland",
+    "capital": "Helsinki"
+  },
+  {
+    "nr": 13,
+    "country": "Dänemark",
+    "capital": "Kopenhagen"
+  },
+  {
+    "nr": 14,
+    "country": "Deutschland",
+    "capital": "Berlin"
+  },
+  {
+    "nr": 15,
+    "country": "Schweiz",
+    "capital": "Bern"
+  },
+  {
+    "nr": 16,
+    "country": "Italien",
+    "capital": "Rom"
+  },
+  {
+    "nr": 17,
+    "country": "Österreich",
+    "capital": "Wien"
+  },
+  {
+    "nr": 18,
+    "country": "Ungarn",
+    "capital": "Budapest"
+  },
+  {
+    "nr": 19,
+    "country": "Tschechien",
+    "capital": "Prag"
+  },
+  {
+    "nr": 20,
+    "country": "Slowakei",
+    "capital": "Bratislava"
+  },
+  {
+    "nr": 21,
+    "country": "Polen",
+    "capital": "Warschau"
+  },
+  {
+    "nr": 22,
+    "country": "Estland",
+    "capital": "Tallinn"
+  },
+  {
+    "nr": 23,
+    "country": "Lettland",
+    "capital": "Riga"
+  },
+  {
+    "nr": 24,
+    "country": "Litauen",
+    "capital": "Wilna"
+  },
+  {
+    "nr": 25,
+    "country": "Russland (Teil)",
+    "capital": "Moskau"
+  },
+  {
+    "nr": 26,
+    "country": "Belarus",
+    "capital": "Minsk"
+  },
+  {
+    "nr": 27,
+    "country": "Ukraine",
+    "capital": "Kiew"
+  },
+  {
+    "nr": 28,
+    "country": "Moldova",
+    "capital": "Chişinău"
+  },
+  {
+    "nr": 29,
+    "country": "Rumänien",
+    "capital": "Bukarest"
+  },
+  {
+    "nr": 30,
+    "country": "Bulgarien",
+    "capital": "Sofia"
+  },
+  {
+    "nr": 31,
+    "country": "Türkei (Teil)",
+    "capital": "Ankara"
+  },
+  {
+    "nr": 32,
+    "country": "Slowenien",
+    "capital": "Ljubljana"
+  },
+  {
+    "nr": 33,
+    "country": "Kroatien",
+    "capital": "Zagreb"
+  },
+  {
+    "nr": 34,
+    "country": "Bosnien-Herzegowina",
+    "capital": "Sarajevo"
+  },
+  {
+    "nr": 35,
+    "country": "Serbien",
+    "capital": "Belgrad"
+  },
+  {
+    "nr": 36,
+    "country": "Nordmazedonien",
+    "capital": "Skopje"
+  },
+  {
+    "nr": 37,
+    "country": "Montenegro",
+    "capital": "Podgorica"
+  },
+  {
+    "nr": 38,
+    "country": "Kosovo",
+    "capital": "Priština"
+  },
+  {
+    "nr": 39,
+    "country": "Albanien",
+    "capital": "Tirana"
+  },
+  {
+    "nr": 40,
+    "country": "Griechenland",
+    "capital": "Athen"
+  },
+  {
+    "nr": 41,
+    "country": "Malta",
+    "capital": "La Valletta"
+  },
+  {
+    "nr": 42,
+    "country": "Andorra",
+    "capital": "Andorra la Vella"
+  },
+  {
+    "nr": 43,
+    "country": "Monaco",
+    "capital": "Monaco"
+  },
+  {
+    "nr": 44,
+    "country": "Liechtenstein",
+    "capital": "Vaduz"
+  },
+  {
+    "nr": 45,
+    "country": "Vatikanstadt",
+    "capital": "Vatikanstadt"
+  },
+  {
+    "nr": 46,
+    "country": "San Marino",
+    "capital": "San Marino"
+  }
+]
