@@ -121,6 +121,25 @@ COUNTRY_MAP.update({
     "Eritrea": "Eritrea"
 })
 
+COUNTRY_MAP.update({
+    "Kuba": "Cuba",
+    "Jamaika": "Jamaica",
+    "Namibia": "Namibia",
+    "Libyen": "Libya",
+    "Marokko": "Morocco",
+    "Nigeria": "Nigeria",
+    "Kenia": "Kenya",
+    "Algerien": "Algeria",
+    "Indonesien": "Indonesia",
+    "China": "China",
+    "Thailand": "Thailand",
+    "Philippinen": "Philippines",
+    "Indien": "India",
+    "Japan": "Japan",
+    "Malaysia": "Malaysia",
+    "Saudi-Arabien": "Saudi Arabia"
+})
+
 # Create a reverse lookup from English to German
 REVERSE_COUNTRY_MAP = {v: k for k, v in COUNTRY_MAP.items()}
 
@@ -223,6 +242,25 @@ COUNTRY_TO_CODE.update({
     "Democratic Republic of the Congo": "COD",
     "Somalia": "SOM",
     "Eritrea": "ERI"
+})
+
+COUNTRY_TO_CODE.update({
+    "Cuba": "CUB",
+    "Jamaica": "JAM",
+    "Namibia": "NAM",
+    "Libya": "LBY",
+    "Morocco": "MAR",
+    "Nigeria": "NGA",
+    "Kenya": "KEN",
+    "Algeria": "DZA",
+    "Indonesia": "IDN",
+    "China": "CHN",
+    "Thailand": "THA",
+    "Philippines": "PHL",
+    "India": "IND",
+    "Japan": "JPN",
+    "Malaysia": "MYS",
+    "Saudi Arabia": "SAU"
 })
 
 def extract_country_coordinates(country_name):
@@ -640,10 +678,44 @@ def update_map(current_country, mode):
 
     lats = [p[0] for p in pts]
     lons = [p[1] for p in pts]
-    # close polygon
     if pts[0] != pts[-1]:
-        lats.append(pts[0][0])
-        lons.append(pts[0][1])
+        lats.append(pts[0][0]); lons.append(pts[0][1])
+
+    # fix user-provided spelling
+    synonyms = {
+        "Andora": "Andorra",
+        "San MArino": "San Marino",
+        "Lichtenstein": "Liechtenstein",
+        "Vaitikan": "Vatican City",
+        "monaco": "Monaco",
+        "kosovo": "Kosovo",
+        "Monacco": "Monaco",
+        "Kossovo": "Kosovo"
+    }
+    if current_country in synonyms:
+        current_country = synonyms[current_country]
+
+    # special dot‐only countries
+    micro = ["San Marino", "Andorra", "Kosovo", "Vatican City", "Monaco", "Liechtenstein"]
+    centroid = dict(lat=sum(lats)/len(lats), lon=sum(lons)/len(lons))
+    eng = COUNTRY_MAP.get(current_country, current_country)
+    if eng == "Russia":
+        # single point at Moscow
+        centroid = dict(lat=55.7558, lon=37.6173)
+    cat = row.iloc[0]["category"]
+    if eng in micro or eng=="Russia" or cat=="Asia":
+        # dot in learn/quiz
+        learn_fig.add_trace(go.Scattermapbox(
+            lat=[centroid["lat"]], lon=[centroid["lon"]],
+            mode="markers", marker=dict(size=10, color="blue"), name=current_country
+        ))
+        quiz_fig.add_trace(go.Scattermapbox(
+            lat=[centroid["lat"]], lon=[centroid["lon"]],
+            mode="markers", marker=dict(size=10, color="red"), name=current_country
+        ))
+        learn_fig.update_layout(mapbox_center=centroid, mapbox_zoom=4)
+        quiz_fig.update_layout(mapbox_center=centroid, mapbox_zoom=4)
+        return learn_fig, quiz_fig
 
     # learn mode trace
     color = "red" if current_country == "Italien" else "blue"
