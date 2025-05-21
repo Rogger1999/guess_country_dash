@@ -140,6 +140,12 @@ COUNTRY_MAP.update({
     "Saudi-Arabien": "Saudi Arabia"
 })
 
+# Define European microstates
+# Names as they appear in df['country'] (likely German from your JSONs)
+EUROPEAN_MICROSTATES_DF_KEYS = ["Andorra", "Monaco", "Liechtenstein", "Vatikanstadt", "San Marino", "Kosovo", "Malta"]
+# Corresponding English names for checking against the 'eng_name' variable
+EUROPEAN_MICROSTATES_ENGLISH_CHECK = ["Andorra", "Monaco", "Liechtenstein", "Vatican City", "San Marino", "Kosovo", "Malta"]
+
 # Create a reverse lookup from English to German
 REVERSE_COUNTRY_MAP = {v: k for k, v in COUNTRY_MAP.items()}
 
@@ -642,13 +648,12 @@ def switch_screens(mode, selected_cat):
     Input("store-current-country", "data"),
     Input("store-mode", "data")
 )
-def update_map(current_country, mode):
+def update_map(current_country_from_store, mode):
     learn_fig = go.Figure()
     quiz_fig  = go.Figure()
 
-    # initial layout with explicit mapbox properties
+    # Initial layout with explicit mapbox properties
     learn_fig.update_layout(
-        title="Learn Mode",
         mapbox_style="open-street-map",
         mapbox_center=dict(lat=0, lon=0),
         mapbox_zoom=1,
@@ -656,7 +661,6 @@ def update_map(current_country, mode):
         margin={"l":0,"r":0,"t":30,"b":0}
     )
     quiz_fig.update_layout(
-        title="Quiz Mode",
         mapbox_style="open-street-map",
         mapbox_center=dict(lat=0, lon=0),
         mapbox_zoom=1,
@@ -664,24 +668,14 @@ def update_map(current_country, mode):
         margin={"l":0,"r":0,"t":30,"b":0}
     )
 
-    if not current_country:
+    # Set default titles
+    learn_fig.update_layout(title_text="Learn Mode")
+    quiz_fig.update_layout(title_text="Quiz Mode")
+
+    if not current_country_from_store:
         return learn_fig, quiz_fig
 
-    # get country polygon
-    row = df[df["country"] == current_country]
-    if row.empty:
-        return learn_fig, quiz_fig
-
-    pts = row.iloc[0]["geometry_points"]
-    if len(pts) <= 1:
-        return learn_fig, quiz_fig
-
-    lats = [p[0] for p in pts]
-    lons = [p[1] for p in pts]
-    if pts[0] != pts[-1]:
-        lats.append(pts[0][0]); lons.append(pts[0][1])
-
-    # fix user-provided spelling
+    # Fix user-provided spelling (synonyms dictionary)
     synonyms = {
         "Andora": "Andorra",
         "San MArino": "San Marino",
@@ -692,63 +686,128 @@ def update_map(current_country, mode):
         "Monacco": "Monaco",
         "Kossovo": "Kosovo"
     }
-    if current_country in synonyms:
-        current_country = synonyms[current_country]
+    
+    processed_country_name = current_country_from_store
+    if processed_country_name in synonyms:
+        processed_country_name = synonyms[processed_country_name]
 
-    # special dot‐only countries
-    micro = ["San Marino", "Andorra", "Kosovo", "Vatican City", "Monaco", "Liechtenstein"]
-    centroid = dict(lat=sum(lats)/len(lats), lon=sum(lons)/len(lons))
-    eng = COUNTRY_MAP.get(current_country, current_country)
-    if eng == "Russia":
-        # single point at Moscow
-        centroid = dict(lat=55.7558, lon=37.6173)
+    # Get English name for logic, and row for data
+    eng_name = COUNTRY_MAP.get(processed_country_name, processed_country_name)
+    
+    row = df[df["country"] == processed_country_name]
+    if row.empty:
+        # If country (after synonym processing) is not in DataFrame, return empty maps
+        return learn_fig, quiz_fig
+
+    pts = row.iloc[0]["geometry_points"]
     cat = row.iloc[0]["category"]
-    if eng in micro or eng=="Russia" or cat=="Asia":
-        # dot in learn/quiz
+
+    # Case 1: Selected country is a European Microstate - display all of them
+    if eng_name in EUROPEAN_MICROSTATES_ENGLISH_CHECK:
+        learn_fig.update_layout(title_text=f"European Microstates (Selected: {processed_country_name})")
+        quiz_fig.update_layout(title_text="Quiz: European Microstates")
+
+        for micro_df_key in EUROPEAN_MICROSTATES_DF_KEYS:
+            micro_row = df[df["country"] == micro_df_key]
+            if micro_row.empty:
+                continue
+            
+            micro_pts_data = micro_row.iloc[0]["geometry_points"]
+            if not micro_pts_data or len(micro_pts_data) == 0 or not isinstance(micro_pts_data[0], list) or len(micro_pts_data[0])!=2 :
+                continue # Skip if no valid points
+
+            micro_lats_calc = [p[0] for p in micro_pts_data]
+            micro_lons_calc = [p[1] for p in micro_pts_data]
+
+            if not micro_lats_calc or not micro_lons_calc:
+                continue
+
+            micro_centroid = dict(lat=sum(micro_lats_calc) / len(micro_lats_calc), 
+                                  lon=sum(micro_lons_calc) / len(micro_lons_calc))
+            
+            marker_color_learn = "darkviolet" if micro_df_key == processed_country_name else "blue"
+            marker_color_quiz = "orange" if micro_df_key == processed_country_name else "red"
+
+
+            learn_fig.add_trace(go.Scattermapbox(
+                lat=[micro_centroid["lat"]], lon=[micro_centroid["lon"]],
+                mode="markers+text", marker=dict(size=12, color=marker_color_learn), name=micro_df_key,
+                text=[micro_df_key], textposition="top right", textfont=dict(size=10)
+            ))
+            quiz_fig.add_trace(go.Scattermapbox(
+                lat=[micro_centroid["lat"]], lon=[micro_centroid["lon"]],
+                mode="markers", marker=dict(size=12, color=marker_color_quiz), name=micro_df_key
+            ))
+        
+        # Center map on Europe to show all microstates
+        map_center_europe = dict(lat=47, lon=12) # Adjusted for better coverage including Malta
+        map_zoom_europe = 3.6
+        learn_fig.update_layout(mapbox_center=map_center_europe, mapbox_zoom=map_zoom_europe)
+        quiz_fig.update_layout(mapbox_center=map_center_europe, mapbox_zoom=map_zoom_europe)
+        return learn_fig, quiz_fig
+
+    # Case 2: Selected country is Russia or an Asian country (not a European microstate) - display as single dot
+    if eng_name == "Russia" or (cat == "Asia" and eng_name not in EUROPEAN_MICROSTATES_ENGLISH_CHECK):
+        if not pts or len(pts) <= 1 or not isinstance(pts[0], list) or len(pts[0])!=2: # Check for valid points for centroid calculation
+            return learn_fig, quiz_fig # Not enough data for centroid
+
+        lats_calc = [p[0] for p in pts]
+        lons_calc = [p[1] for p in pts]
+        if not lats_calc or not lons_calc:
+             return learn_fig, quiz_fig
+
+        centroid = dict(lat=sum(lats_calc)/len(lats_calc), lon=sum(lons_calc)/len(lons_calc))
+        if eng_name == "Russia":
+            centroid = dict(lat=55.7558, lon=37.6173) # Moscow
+
         learn_fig.add_trace(go.Scattermapbox(
             lat=[centroid["lat"]], lon=[centroid["lon"]],
-            mode="markers", marker=dict(size=10, color="blue"), name=current_country
+            mode="markers", marker=dict(size=10, color="blue"), name=processed_country_name
         ))
         quiz_fig.add_trace(go.Scattermapbox(
             lat=[centroid["lat"]], lon=[centroid["lon"]],
-            mode="markers", marker=dict(size=10, color="red"), name=current_country
+            mode="markers", marker=dict(size=10, color="red"), name=processed_country_name
         ))
-        learn_fig.update_layout(mapbox_center=centroid, mapbox_zoom=4)
-        quiz_fig.update_layout(mapbox_center=centroid, mapbox_zoom=4)
+        learn_fig.update_layout(mapbox_center=centroid, mapbox_zoom=4, title_text=f"Learn: {processed_country_name}")
+        quiz_fig.update_layout(mapbox_center=centroid, mapbox_zoom=4, title_text=f"Quiz: {processed_country_name}")
         return learn_fig, quiz_fig
 
-    # learn mode trace
-    color = "red" if current_country == "Italien" else "blue"
+    # Case 3: Default - display as polygon
+    if not pts or len(pts) <= 1 or not isinstance(pts[0], list) or len(pts[0])!=2: # Check for valid polygon points
+        return learn_fig, quiz_fig
+
+    lats_poly = [p[0] for p in pts]
+    lons_poly = [p[1] for p in pts]
+    if pts[0] != pts[-1]: # Ensure polygon is closed
+        lats_poly.append(pts[0][0])
+        lons_poly.append(pts[0][1])
+
+    # Update titles for polygon display
+    learn_fig.update_layout(title_text=f"Learn: {processed_country_name}")
+    quiz_fig.update_layout(title_text=f"Quiz: {processed_country_name}")
+    
+    color = "red" if processed_country_name == "Italien" else "blue"
     learn_fig.add_trace(go.Scattermapbox(
-        lat=lats, lon=lons, mode="lines",
+        lat=lats_poly, lon=lons_poly, mode="lines",
         fill="toself", fillcolor=color, line=dict(width=2, color=color),
-        opacity=0.6, name=current_country
+        opacity=0.6, name=processed_country_name
     ))
-
-    # quiz mode trace
     quiz_fig.add_trace(go.Scattermapbox(
-        lat=lats, lon=lons, mode="lines",
-        fill="toself", fillcolor="red",   line=dict(width=2, color="red"),
-        opacity=0.6, name=current_country
+        lat=lats_poly, lon=lons_poly, mode="lines",
+        fill="toself", fillcolor="red", line=dict(width=2, color="red"),
+        opacity=0.6, name=processed_country_name
     ))
 
-    # recenter + zoom around country
-    lat0, lat1 = min(lats), max(lats)
-    lon0, lon1 = min(lons), max(lons)
-    center = dict(lat=(lat0+lat1)/2, lon=(lon0+lon1)/2)
-    span = max(lat1-lat0, lon1-lon0)
-    # raise upper zoom limit from 6 to 12 for micro‐states
-    zoom = max(2, min(12, 4/span if span>0 else 2))
+    # Recenter + zoom for polygon
+    lat0, lat1 = min(lats_poly), max(lats_poly)
+    lon0, lon1 = min(lons_poly), max(lons_poly)
+    center_poly = dict(lat=(lat0 + lat1) / 2, lon=(lon0 + lon1) / 2)
+    span_poly = max(lat1 - lat0, lon1 - lon0, 0.1) # Avoid division by zero if span is tiny
+    zoom_poly = max(2, min(12, 4 / span_poly if span_poly > 0 else 2))
 
-    learn_fig.update_layout(
-        mapbox_center=center,
-        mapbox_zoom=zoom
-    )
-    quiz_fig.update_layout(
-        mapbox_center=center,
-        mapbox_zoom=zoom
-    )
-
+    learn_fig.update_layout(mapbox_center=center_poly, mapbox_zoom=zoom_poly)
+    quiz_fig.update_layout(mapbox_center=center_poly, mapbox_zoom=zoom_poly)
+    
     return learn_fig, quiz_fig
 
 ###############################################################################
